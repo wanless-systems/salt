@@ -326,11 +326,11 @@ def get_resources_vms(call=None, resFilter=None, includeConfig=True):
 
         salt-cloud -f get_resources_vms my-proxmox-config
     '''
-    log.debug('Getting resource: vms.. (filter: %s)', resFilter)
-    resources = query('get', 'cluster/resources')
 
     timeoutTime = time.time() + 60
     while True:
+        log.debug('Getting resource: vms.. (filter: %s)', resFilter)
+        resources = query('get', 'cluster/resources')
         ret = {}
         badResource = False
         for resource in resources:
@@ -338,7 +338,7 @@ def get_resources_vms(call=None, resFilter=None, includeConfig=True):
                                                            'lxc']:
                 try:
                     name = resource['name']
-                except IndexError:
+                except KeyError:
                     badResource = True
                     log.debug('No name in VM resource %s', repr(resource))
                     break
